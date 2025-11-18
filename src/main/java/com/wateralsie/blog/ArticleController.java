@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,6 +47,13 @@ public class ArticleController {
             originalArticle.setContent(article.content());
         }
         articleRepository.save(originalArticle);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{articleId}")
+    public ResponseEntity<String> deleteArticle(@PathVariable Long articleId) {
+        ArticleEntity article = articleRepository.findById(articleId).orElseThrow();
+        articleRepository.delete(article);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

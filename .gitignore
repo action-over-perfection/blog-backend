@@ -16,3 +16,6 @@ out/
 
 # builds
 lib/
+
+.env
+src/main/resources/application-*.properties

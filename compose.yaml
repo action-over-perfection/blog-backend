@@ -1,0 +1,11 @@
+services:
+  mysql:
+    container_name: 'wateralsie-blog'
+    image: 'mysql:latest'
+    environment:
+      - 'MYSQL_DATABASE=${DB_NAME}'
+      - 'MYSQL_PASSWORD=${DB_PASSWORD}'
+      - 'MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}'
+      - 'MYSQL_USER=${DB_USERNAME}'
+    ports:
+      - '3306:3306'

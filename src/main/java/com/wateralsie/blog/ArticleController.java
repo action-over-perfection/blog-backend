@@ -1,7 +1,5 @@
 package com.wateralsie.blog;
 
-import java.util.Objects;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,47 +14,37 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/articles")
 public class ArticleController {
-    @Autowired
-    private ArticleRepository articleRepository;
+    private final ArticleService articleService;
+
+    public ArticleController(ArticleService articleService) {
+        this.articleService = articleService;
+    }
 
     @GetMapping
     public Iterable<ArticleEntity> getAllArticles() {
-        return articleRepository.findAll();
+        return articleService.getAllArticles();
     }
 
     @GetMapping("/{articleId}")
     public ArticleEntity getArticleById(@PathVariable Long articleId) {
-        return articleRepository.findById(articleId)
-            .orElseThrow(() -> new BlogException(HttpStatus.NOT_FOUND.value(), "해당 id를 가진 글이 존재하지 않습니다 : " + articleId));
+        return articleService.getArticleById(articleId);
     }
 
     @PostMapping
     public ResponseEntity<String> postArticle(@RequestBody Article article) {
-        ArticleEntity newArticle = ArticleEntity.from(article);
-        articleRepository.save(newArticle);
+        articleService.createArticle(article);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PatchMapping("/{articleId}")
     public ResponseEntity<String> patchArticle(@PathVariable Long articleId, @RequestBody Article article) {
-        ArticleEntity originalArticle = articleRepository.findById(articleId)
-            .orElseThrow(() -> new BlogException(HttpStatus.NOT_FOUND.value(), "해당 id를 가진 글이 존재하지 않습니다 : " + articleId));
-
-        if (!Objects.equals(originalArticle.getTitle(), article.title())) {
-            originalArticle.setTitle(article.title());
-        }
-        if (!Objects.equals(originalArticle.getContent(), article.content())) {
-            originalArticle.setContent(article.content());
-        }
-        articleRepository.save(originalArticle);
+        articleService.updateArticle(articleId, article);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{articleId}")
     public ResponseEntity<String> deleteArticle(@PathVariable Long articleId) {
-        ArticleEntity article = articleRepository.findById(articleId)
-            .orElseThrow(() -> new BlogException(HttpStatus.NOT_FOUND.value(), "해당 id를 가진 글이 존재하지 않습니다 : " + articleId));
-        articleRepository.delete(article);
+        articleService.deleteArticle(articleId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -1,4 +1,4 @@
-package com.wateralsie.blog;
+package com.wateralsie.blog.common.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.wateralsie.blog;
+package com.wateralsie.blog.common.dto;
 
 import lombok.Builder;
 

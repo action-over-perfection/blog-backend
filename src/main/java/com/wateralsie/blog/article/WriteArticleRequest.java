@@ -1,4 +1,4 @@
-package com.wateralsie.blog;
+package com.wateralsie.blog.article;
 
 public record WriteArticleRequest(String title, String content) {
     public Article toDomain() {

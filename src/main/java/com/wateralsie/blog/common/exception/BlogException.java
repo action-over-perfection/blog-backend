@@ -1,4 +1,4 @@
-package com.wateralsie.blog;
+package com.wateralsie.blog.common.exception;
 
 public class BlogException extends RuntimeException {
     private final int statusCode;

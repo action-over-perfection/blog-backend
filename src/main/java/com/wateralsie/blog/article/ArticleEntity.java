@@ -1,4 +1,4 @@
-package com.wateralsie.blog;
+package com.wateralsie.blog.article;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

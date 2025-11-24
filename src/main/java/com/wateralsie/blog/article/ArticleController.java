@@ -1,5 +1,6 @@
-package com.wateralsie.blog;
+package com.wateralsie.blog.article;
 
+import com.wateralsie.blog.common.dto.BlogResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.wateralsie.blog;
+package com.wateralsie.blog.article;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

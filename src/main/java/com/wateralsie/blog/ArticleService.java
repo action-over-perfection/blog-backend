@@ -1,44 +1,39 @@
 package com.wateralsie.blog;
 
+import java.util.List;
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ArticleService {
     private final ArticleRepository articleRepository;
 
-    public ArticleService(ArticleRepository articleRepository) {
-        this.articleRepository = articleRepository;
+    public List<Article> getAllArticles() {
+        return articleRepository.findAll().stream()
+                .map(ArticleEntity::toDomain)
+                .toList();
     }
 
-    public Iterable<ArticleEntity> getAllArticles() {
-        return articleRepository.findAll();
-    }
-
-    public ArticleEntity getArticleById(Long articleId) {
+    public Article getArticleById(Long articleId) {
         return articleRepository.findById(articleId)
                 .orElseThrow(
-                        () -> new BlogException(HttpStatus.NOT_FOUND.value(), "해당 id를 가진 글이 존재하지 않습니다 : " + articleId));
+                        () -> new BlogException(HttpStatus.NOT_FOUND.value(), "해당 id를 가진 글이 존재하지 않습니다 : " + articleId))
+                .toDomain();
     }
 
-    public ArticleEntity createArticle(Article article) {
-        ArticleEntity newArticle = ArticleEntity.from(article);
-        return articleRepository.save(newArticle);
+    public Article createArticle(Article article) {
+        return articleRepository.save(new ArticleEntity(article)).toDomain();
     }
 
-    public ArticleEntity updateArticle(Long articleId, Article article) {
+    public Article updateArticle(Long articleId, Article article) {
         ArticleEntity originalArticle = articleRepository.findById(articleId)
                 .orElseThrow(
                         () -> new BlogException(HttpStatus.NOT_FOUND.value(), "해당 id를 가진 글이 존재하지 않습니다 : " + articleId));
-
-        if (!Objects.equals(originalArticle.getTitle(), article.title())) {
-            originalArticle.setTitle(article.title());
-        }
-        if (!Objects.equals(originalArticle.getContent(), article.content())) {
-            originalArticle.setContent(article.content());
-        }
-        return articleRepository.save(originalArticle);
+        originalArticle.update(article);
+        return articleRepository.save(originalArticle).toDomain();
     }
 
     public void deleteArticle(Long articleId) {

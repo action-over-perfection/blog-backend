@@ -1,3 +1,7 @@
 package com.wateralsie.blog;
 
-public record Article(String title, String content) { }
+import lombok.Builder;
+
+@Builder
+public record Article(Long id, String title, String content) {
+}
